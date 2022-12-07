@@ -6,7 +6,7 @@ let rootDir = {
   "files": [],
   "dirs": {},
 };
-let dirs = {"/":rootDir};
+let dirs = [];
 let data;
 
 let rl = readline.createInterface({
@@ -36,7 +36,7 @@ rl.on('line', function (line) {
         "files": [],
         "dirs": {},
       };
-      dirs[data[1]] = currDir.dirs[data[1]];
+      dirs.push(currDir.dirs[data[1]]);
     } else {
       let newFile = {"name":data[1], "size":parseInt(data[0])};
       currDir.files.push(newFile);
@@ -55,10 +55,10 @@ rl.on('close', function (cmd) {
     "size": rootDir.size
   }
   let needToFree = 30000000 - (70000000 - rootDir.size);
-  Object.entries(dirs).forEach(dir => {
-    if ((dir[1].size > needToFree) && (dir[1].size < ans2.size)) {
-      ans2.dir = dir[0];
-      ans2.size = dir[1].size;
+  dirs.forEach(dir => {
+    if ((dir.size > needToFree) && (dir.size < ans2.size)) {
+      ans2.dir = dir.name;
+      ans2.size = dir.size;
     }
   });
   console.log("Part 1 - total size is: " + ans1.sum);
