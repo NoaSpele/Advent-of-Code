@@ -3,7 +3,7 @@
 
 using namespace std;
 
-// Run: "make dec4" and "./dec4"
+// Run: "make dec8" and "./dec8 < input.txt"
 int main(void) {
   string line;
   cin >> line;

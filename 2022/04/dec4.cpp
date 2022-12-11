@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// Run: "make dec4" and "./dec4 < input.txt"
 int main(void) {
   string line, r1, r2;
   int start1, start2, end1, end2, sum1=0, sum2=0;
