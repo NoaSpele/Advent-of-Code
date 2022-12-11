@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <functional>
 #include <math.h>
 
 using namespace std;
@@ -107,8 +108,7 @@ int main(int argc, char** argv) {
     }
   }
 
-  sort(numInspections.begin(), numInspections.end());
-  reverse(numInspections.begin(), numInspections.end());
+  sort(numInspections.rbegin(), numInspections.rend());
   cout << "Number of inspections: " << endl;
   for(int i = 0; i<numInspections.size(); i++) {
     cout << "Monkey " << i << ": " << numInspections[i] << endl;
