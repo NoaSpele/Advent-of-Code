@@ -37,60 +37,35 @@ const initVisited = (w, h) => {
   return ret
 };
 
-function bfs(s, w, h, grid) {
+let queue;
+let visited;
+const checkPos = (p1, p2) => {
+  if (!visited[p2[0]][p2[1]] &&
+      checkIfLegalMove(
+        heigthMap[p1[0]][p1[1]],
+        heigthMap[p2[0]][p2[1]]
+      )) {
+    visited[p2[0]][p2[1]] = true;
+    queue.push([p2[0], p2[1], p1[2]+1]);
+  }
+}
+
+const bfs = (s, w, h) => {
   queue = [];
   queue.push([s[0], s[1], 0]);
 
-  let visited = initVisited(w, h);
+  visited = initVisited(w, h);
   visited[s[0]][s[1]] = true;
 
   while(queue.length > 0) {
     let currPos = queue.shift();
-    if (grid[currPos[0]][currPos[1]] === "E") {
-      return currPos[2];
-    }
+    if (heigthMap[currPos[0]][currPos[1]] === "E") return currPos[2];
 
-    let currX;
-    let currY;
-    currX = Math.max(0, currPos[0]-1);
-    if (!visited[currX][currPos[1]] &&
-        checkIfLegalMove(
-          grid[currPos[0]][currPos[1]],
-          grid[currX][currPos[1]]
-        )) {
-      visited[currX][currPos[1]] = true;
-      queue.push([currX, currPos[1], currPos[2]+1]);
-    }
-
-    currX = Math.min(currPos[0]+1, h-1);
-    if (!visited[currX][currPos[1]] &&
-        checkIfLegalMove(
-          grid[currPos[0]][currPos[1]],
-          grid[currX][currPos[1]]
-        )) {
-      visited[currX][currPos[1]] = true;
-      queue.push([currX, currPos[1], currPos[2]+1]);
-    }
-
-    currY = Math.max(0, currPos[1]-1);
-    if (!visited[currPos[0]][currY] &&
-        checkIfLegalMove(
-          grid[currPos[0]][currPos[1]],
-          grid[currPos[0]][currY]
-        )) {
-      visited[currPos[0]][currY] = true;
-      queue.push([currPos[0], currY, currPos[2]+1]);
-    }
-
-    currY = Math.min(currPos[1]+1, w-1);
-    if (!visited[currPos[0]][currY] &&
-        checkIfLegalMove(
-          grid[currPos[0]][currPos[1]],
-          grid[currPos[0]][currY]
-        )) {
-      visited[currPos[0]][currY] = true;
-      queue.push([currPos[0], currY, currPos[2]+1]);
-    }
+    [[Math.max(0, currPos[0]-1), currPos[1]],
+      [Math.min(currPos[0]+1, h-1), currPos[1]],
+      [currPos[0], Math.max(0, currPos[1]-1)],
+      [currPos[0], Math.min(currPos[1]+1, w-1)]
+    ].forEach(p => checkPos(currPos, p));
   }
   return -1;
 }
@@ -102,7 +77,7 @@ rl.on('close', function (cmd) {
   let ans1 = bfs(S, w, h, heigthMap);
   let sols = [ans1];
   aPos.forEach(pos => {
-    let sol = bfs(pos, w, h, heigthMap);
+    let sol = bfs(pos, w, h);
     if(sol > 0) sols.push(sol);
   });
   let ans2 = Math.min(...sols);
