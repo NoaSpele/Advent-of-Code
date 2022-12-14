@@ -41,17 +41,16 @@ ans2 = 0
 for line in sys.stdin:
     if "\n" in line:
         line = line[0:-1]
-    coordinates = line.split(" -> ")
-    points = []
-    for c in coordinates:
+
+    prev = None
+    for c in line.split(" -> "):
         x = int(c.split(",")[0])
         y = int(c.split(",")[1])
         if y > maxDepth:
             maxDepth = y
-        points.append([x, y])
-
-    for i in range(1,len(points)):
-        addPath(points[i], points[i-1])
+        if prev is not None:
+            addPath([x, y], prev)
+        prev = [x, y]
 
 initialState = set(state)
 while addSand(1):
