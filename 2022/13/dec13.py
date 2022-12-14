@@ -1,5 +1,4 @@
 import sys
-import collections.abc
 
 def findParts(string):
     ret = []
@@ -34,7 +33,7 @@ def findClosing(string):
     return -1
 
 def compare(a, b):
-    if isArr(a) and isArr(b):
+    if isinstance(a, list) and isinstance(b, list):
         while (len(a) > 0) or (len(b) > 0):
             if len(a) == 0:
                 return 1
@@ -46,18 +45,15 @@ def compare(a, b):
             a = a[1:]
             b = b[1:]
         return 0
-    elif isArr(a):
+    elif isinstance(a, list):
         return compare(a, [b])
-    elif isArr(b):
+    elif isinstance(b, list):
         return compare([a], b)
     if a < b:
         return 1
     elif a > b:
         return -1
     return 0
-
-def isArr(a):
-    return isinstance(a, collections.abc.Sequence)
 
 packets = []
 for line in sys.stdin:
