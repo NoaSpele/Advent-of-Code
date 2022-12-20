@@ -5,18 +5,12 @@ let rl = readline.createInterface({
 });
 
 let encryptedFile = [];
-let decryptedFile = [];
-let currPosEnc = {};
-let currPosDec = {};
+let currPos = {};
 let index = 0; let pos0;
 rl.on('line', function (line) {
   let currNum = parseInt(line);
   encryptedFile.push(currNum);
-  decryptedFile.push(currNum);
-  // enc => dec
-  currPosEnc[index] = index;
-  // dec => enc
-  currPosDec[index] = index;
+  currPos[index] = index;
   if (currNum === 0) {
     pos0 = index;
   }
@@ -72,9 +66,9 @@ const solve = (rep, key, decFile, posEnc, posDec) => {
 rl.on('close', function (cmd) {
   const key = 811589153;
   console.log("= Solving day 20 =");
-  let ans1 = solve(1, 1, [...decryptedFile], {...currPosEnc}, {...currPosDec});
+  let ans1 = solve(1, 1, [...encryptedFile], {...currPos}, {...currPos});
   console.log("Part 1 calculated!");
-  let ans2 = solve(10, key, [...decryptedFile], {...currPosEnc}, {...currPosDec});
+  let ans2 = solve(10, key, [...encryptedFile], {...currPos}, {...currPos});
   console.log("Part 2 calculated!");
   console.log("==================\n");
 
