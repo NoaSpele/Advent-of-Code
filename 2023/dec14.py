@@ -32,6 +32,7 @@ g = tilt(g, 0, 1, False, True) # S
 g = tilt(g, 1, 0, True, False) # E
 
 numCycles, scores, cl = 1, [], -1
+cycleStart, cycleLen = 150, 5
 while True:
     g = tilt(g, 0, -1, False, False)
     g = tilt(g, -1, 0, False, False)
@@ -39,13 +40,16 @@ while True:
     g = tilt(g, 1, 0, True, False)
     numCycles += 1
     # Assuming that cycle starts before 150
-    if numCycles > 150:
+    if numCycles > cycleStart:
         scores.append(getPre(g))
         if len(scores) % 2 == 0:
             half = int(len(scores)/2)
-            if scores[:half] == scores[half:]:
+            if half > cycleLen and scores[:half] == scores[half:]:
                 cl = half
                 break
+
+    # Other solution is to find same board again and increment numCycles to
+    # numCycles = numCycles + cl * (end - numCycles) // cl
 
 # end - numCycles = how many more we need to do
 # answer is value at idx = offset - 1

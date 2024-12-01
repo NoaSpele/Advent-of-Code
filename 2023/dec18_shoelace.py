@@ -13,6 +13,7 @@ import sys
 # This is saying that if you extend the shape with 0.5 in each direction the new area is now
 # 1 for each interior point and 1 for each boundary point
 
+# TODO use green's theorem instead or coordinate compression
 lines = open(sys.argv[1]).read().split('\n')
 x, y, x2, y2 = 0, 0, 0, 0
 px1, py1, px2, py2 = 0,0,0,0

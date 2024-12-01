@@ -77,4 +77,6 @@ def findCut():
                     return len(found) * (len(wires) - len(found))
     return -1
 
+# TODO use Ford-Fulkerson algorithm, Karger–Stein algorithm,
+# minimum spanning tree (Prim's, Kruskal) or other approach
 print(f'Answer Part 1: {findCut()}')
