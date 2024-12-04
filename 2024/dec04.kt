@@ -5,27 +5,34 @@ fun main(args: Array<String>) {
     val lines: List<String> = Path(args[0]).readLines()
     val m = lines.map { it.toCharArray().toList() }
     val h = m.size; val w = m[0].size
+    var ans1 = 0; var ans2 = 0
 
-    var ans1 = 0
-    lines.forEach { ans1 += getNumXmas(it) }
-    (0..<w).forEach { ans1 += getNumXmas(m.map {row -> row[it] }.joinToString("")) }
+    (0..<w).forEach { x ->
+        (0..<h).forEach{ y ->
+            if (y+3 < h) {
+                if (getString(x, y, 0, 1, m) == "XMAS") ans1 += 1
+                if (getString(x, y, 0, 1, m) == "XMAS".reversed()) ans1 += 1
+            }
+            if (x+3 < w) {
+                if (getString(x, y, 1, 0, m) == "XMAS") ans1 += 1
+                if (getString(x, y, 1, 0, m) == "XMAS".reversed()) ans1 += 1
+            }
+            if (y+3 < h && x+3 < w) {
+                if (getString(x, y, 1, 1, m) == "XMAS") ans1 += 1
+                if (getString(x,y,1,1, m) == "XMAS".reversed()) ans1 += 1
+            }
+            if (y-3 >= 0 && x+3<w) {
+                if (getString(x, y, 1, -1, m) == "XMAS") ans1 += 1
+                if (getString(x,y,1,-1, m) == "XMAS".reversed()) ans1 += 1
+            }
 
-    for (i in 0..<h-3) { ans1 += getNumXmas(getDiagonalSeq(i, 0, m)) }
-    for (i in 1..<w-3) { ans1 += getNumXmas(getDiagonalSeq(0, i, m)) }
-
-    val flipped = m.map { it.reversed() }
-    for (i in 0..<h-3) { ans1 += getNumXmas(getDiagonalSeq(i, 0, flipped)) }
-    for (i in 1..<w-3) { ans1 += getNumXmas(getDiagonalSeq(0, i, flipped)) }
-
-    var ans2 = 0
-    for (x in 0..<w-2) {
-        for (y in 0 ..<h-2) {
-            val seq1 = charArrayOf(m[x][y], m[x+1][y+1], m[x+2][y+2]).joinToString("")
-            val seq2 = charArrayOf(m[x+2][y], m[x+1][y+1], m[x][y+2]).joinToString("")
-            if (
-                (seq1 == "MAS" || seq1.reversed() == "MAS")
-                && (seq2 == "MAS" || seq2.reversed() == "MAS")
-            ) ans2 += 1
+            if (x<w-2 && y<h-2) {
+                val seq1 = listOf(m[y][x], m[y+1][x+1], m[y+2][x+2]).joinToString("")
+                val seq2 = listOf(m[y+2][x], m[y+1][x+1], m[y][x+2]).joinToString("")
+                if (seq1 == "MAS" || seq1.reversed() == "MAS") {
+                    if (seq2 == "MAS" || seq2.reversed() == "MAS") ans2 += 1
+                }
+            }
         }
     }
 
@@ -33,17 +40,6 @@ fun main(args: Array<String>) {
     println("Ans 2: $ans2")
 }
 
-fun getNumXmas (seq: String): Int {
-    val re = Regex("XMAS")
-    return re.findAll(seq).toList().size + re.findAll(seq.reversed()).toList().size
-}
-
-fun getDiagonalSeq(sr: Int, sc: Int, m: List<List<Char>>): String {
-    val seq: MutableList<Char> = mutableListOf()
-    var cx = sc; var cy = sr
-    while (cx < m[0].size && cy < m.size) {
-        seq += m[cy][cx]
-        cx += 1; cy += 1
-    }
-    return seq.joinToString("")
+fun getString(x: Int, y: Int, dx: Int, dy: Int, m: List<List<Char>>): String {
+    return listOf(m[y][x], m[y + dy][x + dx], m[y + 2*dy][x + 2*dx], m[y + 3*dy][x + 3*dx]).joinToString("")
 }
