@@ -2,7 +2,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.readLines
 
 data class Edge(val x: Int, val y: Int, val dir: Int) // 1: up, 2: down, 3. left, 4: right
-val dirs = listOf(
+private val dirs = listOf(
     Triple(1,0, 4), Triple(-1, 0, 3),
     Triple(0,1, 2), Triple(0, -1, 1))
 fun main(args: Array<String>) {
@@ -63,7 +63,7 @@ fun main(args: Array<String>) {
     println("Ans 2: $ans2")
 }
 
-fun findGroup(
+private fun findGroup(
     x: Int, y: Int, c: Char, map: List<List<Char>>, seen: MutableSet<Pair<Int, Int>>
 ): MutableList<Pair<Int, Int>> {
     val queue = ArrayDeque(listOf(Pair(x,y)))
