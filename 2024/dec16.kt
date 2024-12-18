@@ -1,17 +1,18 @@
+import java.util.PriorityQueue
 import kotlin.io.path.Path
 import kotlin.io.path.readLines
 
 private val dirs = listOf(
-    Triple(1,0, 0),
-    Triple(-1,0, 1),
-    Triple(0,1, 2),
-    Triple(0,-1, 3))
+    DirInv(1,0,0,1),
+    DirInv(-1,0,1,0),
+    DirInv(0,1,2,3),
+    DirInv(0,-1,3,2))
+data class DirInv (val dx: Int, val dy: Int, val dir: Int, val inv: Int)
 data class Data (val x: Int, val y: Int, val dir: Int, val c: Int, val p: String)
 fun main(args: Array<String>) {
     val map: List<List<Char>> = Path(args[0]).readLines().map { it.toList() }
-    val w = map[0].size; val h = map.size
     var sPos = Pair(-1, -1); var ePos = Pair(-1, -1)
-    for (x in 0..<w) { for(y in 0..<h) {
+    for (x in 0..<map[0].size) { for(y in map.indices) {
         if (map[y][x] == 'S') sPos = Pair(x,y)
         if (map[y][x] == 'E') ePos = Pair(x,y)
     } }
@@ -29,30 +30,27 @@ fun main(args: Array<String>) {
 fun findCheapest(
     sPos: Pair<Int, Int>, ePos: Pair<Int, Int>, map: List<List<Char>>, best: Int?
 ): Pair<Int?, List<String>> {
-    val w = map[0].size; val h = map.size
     val paths: MutableList<String> = mutableListOf()
-    val queue = mutableListOf(Data(
-        sPos.first, sPos.second, 2, 0, ""
-    ))
-    val seen: MutableMap<Triple<Int, Int, Int>, Int> = mutableMapOf()
+    val queue = PriorityQueue<Data> { a, b -> a.c - b.c }
+    queue.offer(Data(sPos.first, sPos.second, -1, 0, ""))
+    val seen: MutableMap<String, Int> = mutableMapOf()
     while (queue.isNotEmpty()) {
-        val (x,y,dir,c,p) = queue.removeFirst()
-        if (x !in 0..<w || y !in 0..<h) continue
-        if (map[y][x] == '#') continue
-        val currSeen = seen[Triple(x,y,dir)]
-        if (currSeen != null && currSeen < c) continue
-        seen[Triple(x,y,dir)] = c
+        val (x,y,dir,c,p) = queue.poll()
+        if (x !in 0..<map[0].size || y !in map.indices || map[y][x] == '#') continue
+        val currSeen = seen["$x,$y,$dir"]
+        if (currSeen != null && (best == null || currSeen < c)) continue
+        seen["$x,$y,$dir"] = c
         if (x == ePos.first && y == ePos.second) {
-            if (best != null && best == c) paths += "$p;$x,$y"
-            continue
+            if (best == null ) return Pair(c, listOf())
+            if (best == c) paths += "$p;$x,$y"
+            else return Pair(-1, paths)
         }
-        dirs.forEach { (dx, dy, d) ->
-            val toAdd = if (d == dir) 1 else 1001
-            queue.addLast(Data(x+dx, y+dy, d, c + toAdd, "$p;$x,$y"))
+        dirs.forEach { (dx, dy, d, i) ->
+            if (dir != i) {
+                val toAdd = if (d == dir) 1 else 1001
+                queue.offer(Data(x+dx, y+dy, d, c + toAdd, "$p;$x,$y"))
+            }
         }
     }
-    val shortest = (0..4).minOf {
-        seen[Triple(ePos.first, ePos.second, it)] ?: Integer.MAX_VALUE
-    }
-    return Pair(shortest, paths)
+    return Pair(-1, listOf())
 }
