@@ -8,7 +8,7 @@ fun main(args: Array<String>) {
         it.split(",")[0].toInt(),
         it.split(",")[1].toInt()
     ) }
-    var ans2: Pair<Int, Int> = Pair(-1, -1)
+    val ans2: Pair<Int, Int>
     println("Ans 1: ${getShortestPath(bytes.subList(0, 1024))}")
 
     var i = 1025; var found = false
