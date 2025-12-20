@@ -24,7 +24,7 @@ private val dirs = listOf(
     DirInv(0,-1,3,2))
 private val seenDists: MutableMap<Pair<Pair<Int, Int>, Pair<Int, Int>>, Int> = mutableMapOf()
 data class QO(val x: Int, val y: Int, val d: Int, val dir: Int, val p: List<Pair<Int, Int>> )
-fun findShortest(sPos: Pair<Int, Int>, ePos: Pair<Int, Int>, map: List<List<Char>>): Pair<Int, List<Pair<Int, Int>>> {
+private fun findShortest(sPos: Pair<Int, Int>, ePos: Pair<Int, Int>, map: List<List<Char>>): Pair<Int, List<Pair<Int, Int>>> {
     val queue:MutableList<QO> = mutableListOf(QO(sPos.first, sPos.second, 0, -1, listOf()))
     val seen: MutableSet<Pair<Int, Int>> = mutableSetOf()
     if (Pair(sPos, ePos) in seenDists) return Pair(seenDists[Pair(sPos, ePos)]!!, listOf())

@@ -1,6 +1,9 @@
 *.class
 *.iml
+*in.txt
+*test.txt
 /out/
 /.idea/
+Advent-of-Code.iml
 /2024/in.txt
 /2024/test.txt

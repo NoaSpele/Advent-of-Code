@@ -6,7 +6,6 @@ fun main(args: Array<String>) {
     val lines: List<String> = Path(args[0]).readLines()
     val robots: MutableList<Robot> = mutableListOf()
     val w = 101; val h = 103
-    // val w = 11; val h = 7
 
     lines.forEach { line ->
         val (p1, p2) = line.split(' ')
@@ -27,8 +26,7 @@ fun main(args: Array<String>) {
         if (i == 100) ans1 = q1 * q2 * q3 * q4
 
         // Assumes that the image happens when all positions are unique
-        val poses = robots.map { Pair(it.x, it.y) }.toSet()
-        if (poses.size == robots.size) {
+        if (robots.map { Pair(it.x, it.y) }.toSet().size == robots.size) {
             ans2 = i; drawBoard(robots, i, w, h); break
         }
         i += 1
