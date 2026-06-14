@@ -18,6 +18,7 @@ Low:   35184372088832 (8**15)
 High:  281474976710655 (8**16-1)
  */
 
+// TODO solve with reverse recursion
 fun main(args: Array<String>) {
     val (registers, insStr) = Path(args[0]).readText().split("\n\n")
     val regA = registers.split("\n")[0].split(": ")[1].toLong()
